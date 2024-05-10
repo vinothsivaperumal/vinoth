@@ -1,4 +1,5 @@
-"# vinoth" 
+"# vinoth"
+
 Objective: Synchronize data between two Oracle databases.
 Handling of Missing Source Table:
 If a specific table is not found in the source database, an error will be raised.
