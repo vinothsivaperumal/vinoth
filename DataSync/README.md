@@ -1,11 +1,141 @@
-"# vinoth"
+WITH ALL_VALUES AS (
 
-Objective: Synchronize data between two Oracle databases.
-Handling of Missing Source Table:
-If a specific table is not found in the source database, an error will be raised.
-Destination Database Verification:
-Upon locating the source table, the script will verify its presence in the destination database.
-Table Creation in Destination:
-If the table does not exist in the destination, it will be created to facilitate data synchronization.
-Data Synchronization Approach:
-Data synchronization will be performed in batches of 5000 records using bulk operations.
+    SELECT
+        'LQA_REQ_BORROWER_STG' AS TABLE_NAME,
+        F.KEY::STRING AS COLUMN_NAME,
+        F.VALUE::STRING AS VALUE
+    FROM (
+        SELECT
+            *,
+            OBJECT_CONSTRUCT_KEEP_NULL(*) AS OBJ
+        FROM CARRWCIADEV.LQA_REQ_BORROWER_STG
+        WHERE FILENAME = 'CompleteXMLFile_LQA_req.xml'
+    ) T,
+    LATERAL FLATTEN(INPUT => T.OBJ) F
+
+    UNION ALL
+
+    SELECT
+        'LQA_REQ_LOANRISK_ASSESSMENT_STG' AS TABLE_NAME,
+        F.KEY::STRING,
+        F.VALUE::STRING
+    FROM (
+        SELECT
+            *,
+            OBJECT_CONSTRUCT_KEEP_NULL(*) AS OBJ
+        FROM CARRWCIADEV.LQA_REQ_LOANRISK_ASSESSMENT_STG
+        WHERE FILENAME = 'CompleteXMLFile_LQA_req.xml'
+    ) T,
+    LATERAL FLATTEN(INPUT => T.OBJ) F
+
+    UNION ALL
+
+    SELECT
+        'LQA_REQ_LOAN_STATE_STG' AS TABLE_NAME,
+        F.KEY::STRING,
+        F.VALUE::STRING
+    FROM (
+        SELECT
+            *,
+            OBJECT_CONSTRUCT_KEEP_NULL(*) AS OBJ
+        FROM CARRWCIADEV.LQA_REQ_LOAN_STATE_STG
+        WHERE FILENAME = 'CompleteXMLFile_LQA_req.xml'
+    ) T,
+    LATERAL FLATTEN(INPUT => T.OBJ) F
+
+    UNION ALL
+
+    SELECT
+        'LQA_REQ_LOAN_STATE_ADD_STG' AS TABLE_NAME,
+        F.KEY::STRING,
+        F.VALUE::STRING
+    FROM (
+        SELECT
+            *,
+            OBJECT_CONSTRUCT_KEEP_NULL(*) AS OBJ
+        FROM CARRWCIADEV.LQA_REQ_LOAN_STATE_ADD_STG
+        WHERE FILENAME = 'CompleteXMLFile_LQA_req.xml'
+    ) T,
+    LATERAL FLATTEN(INPUT => T.OBJ) F
+
+    UNION ALL
+
+    SELECT
+        'LQA_REQ_PROPERTY_STG' AS TABLE_NAME,
+        F.KEY::STRING,
+        F.VALUE::STRING
+    FROM (
+        SELECT
+            *,
+            OBJECT_CONSTRUCT_KEEP_NULL(*) AS OBJ
+        FROM CARRWCIADEV.LQA_REQ_PROPERTY_STG
+        WHERE FILENAME = 'CompleteXMLFile_LQA_req.xml'
+    ) T,
+    LATERAL FLATTEN(INPUT => T.OBJ) F
+
+    UNION ALL
+
+    SELECT
+        'LQA_REQ_PROPERTY_APPRAISAL_STG' AS TABLE_NAME,
+        F.KEY::STRING,
+        F.VALUE::STRING
+    FROM (
+        SELECT
+            *,
+            OBJECT_CONSTRUCT_KEEP_NULL(*) AS OBJ
+        FROM CARRWCIADEV.LQA_REQ_PROPERTY_APPRAISAL_STG
+        WHERE FILENAME = 'CompleteXMLFile_LQA_req.xml'
+    ) T,
+    LATERAL FLATTEN(INPUT => T.OBJ) F
+
+    UNION ALL
+
+    SELECT
+        'LQA_REQ_PARTYROLES_STG' AS TABLE_NAME,
+        F.KEY::STRING,
+        F.VALUE::STRING
+    FROM (
+        SELECT
+            *,
+            OBJECT_CONSTRUCT_KEEP_NULL(*) AS OBJ
+        FROM CARRWCIADEV.LQA_REQ_PARTYROLES_STG
+        WHERE FILENAME = 'CompleteXMLFile_LQA_req.xml'
+    ) T,
+    LATERAL FLATTEN(INPUT => T.OBJ) F
+
+    UNION ALL
+
+    SELECT
+        'LQA_REQ_PREVIOUSEVALUATIONRESULTS_STG' AS TABLE_NAME,
+        F.KEY::STRING,
+        F.VALUE::STRING
+    FROM (
+        SELECT
+            *,
+            OBJECT_CONSTRUCT_KEEP_NULL(*) AS OBJ
+        FROM CARRWCIADEV.LQA_REQ_PREVIOUSEVALUATIONRESULTS_STG
+        WHERE FILENAME = 'CompleteXMLFile_LQA_req.xml'
+    ) T,
+    LATERAL FLATTEN(INPUT => T.OBJ) F
+
+    UNION ALL
+
+    SELECT
+        'LQA_REQ_KEYS_STG' AS TABLE_NAME,
+        F.KEY::STRING,
+        F.VALUE::STRING
+    FROM (
+        SELECT
+            *,
+            OBJECT_CONSTRUCT_KEEP_NULL(*) AS OBJ
+        FROM CARRWCIADEV.LQA_REQ_KEYS_STG
+        WHERE FILENAME = 'CompleteXMLFile_LQA_req.xml'
+    ) T,
+    LATERAL FLATTEN(INPUT => T.OBJ) F
+)
+
+SELECT DISTINCT
+    COLUMN_NAME,
+    VALUE
+FROM ALL_VALUES
+ORDER BY COLUMN_NAME;
